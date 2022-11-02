@@ -32,6 +32,7 @@ namespace HotelBookingAPI.Controllers
                     return new JsonResult(NotFound());
 
                 booking = bookingInDb;
+
             }
 
             _context.SaveChanges();
@@ -40,8 +41,8 @@ namespace HotelBookingAPI.Controllers
 
         }
 
-        [HttpGet]
-        public JsonResult Get(int id)
+        [HttpGet("get")]
+        public JsonResult GetByID(int id)
         {
             var result = _context.Bookings?.Find(id);
 
@@ -50,6 +51,36 @@ namespace HotelBookingAPI.Controllers
 
             return new JsonResult(Ok(result));
         }
+
+        [Route("get-all")]
+        [HttpGet]
+        public JsonResult GetAll()
+        {
+            var result = _context.Bookings;
+
+            if (result == null)
+                return new JsonResult(NotFound());
+
+            return new JsonResult(Ok(result));
+
+        }
+
+        [HttpDelete]
+        public JsonResult Delete(int id)
+        {
+            var result = _context.Bookings?.Find(id);
+
+            if (result == null)
+                return new JsonResult(NotFound());
+
+            _context.Remove(result);
+
+            _context.SaveChanges();
+
+            return new JsonResult(Ok(result));
+        }
+
+
 
     }
 
